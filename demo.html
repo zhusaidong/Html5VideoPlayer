@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<title>
+			Html5VideoPlayer
+		</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="author" content="zsdroid">
+	</head>
+	<script type="text/javascript" src="./Html5VideoPlayer.min.js">
+	</script>
+	<script type="text/javascript">
+		window.onload = function()
+		{
+			var html5VideoPlayer = new Html5VideoPlayer(
+				{
+					vZIndex:100,
+					vWidth:600,
+					vHeight:300,
+					vSrc:"http://k.youku.com/player/getFlvPath/sid/547606700693221539fcf_00/st/mp4/fileid/030020010057CE338B6D7D2BEEFCF99CB80F94-CBA5-EEBD-6F6E-D9EA83AC123B?k=755ad521af2ed8fc261f4829&hd=1&myp=0&ts=3167&ymovie=1&r=s0KfeG/MpJGxT8zBRdWN/IHAQeg1csU4bRevfhnqJ68fs6Vmrvvxbp05mfybIb1vHq59DQUHJIg6DJ3Q2ZmMEmXEkJ3oEyXka2HhlrfXHKXWuqHBIbXuGOKkBWIL2ZwM&type=&sid=547606700693221539fcf&token=3708&oip=1863149221&did=ba0414d9036662555bbea1f695a68300&ctype=21&ev=1&ep=i%2BAQz%2FTr17kbcKjVnGtXcXZXXalQE5U0sLrr3lBwZEZ0%2FBEeZzL60na8BI5bEUWZLRLe8kcKsD3VcLOGRjVR9%2FzJpOzEKWzuxesVGzHmb%2B%2Fg6dJOvPuNVVz%2Bop33lHzY",
+				});
+			console.log(html5VideoPlayer);
+			var hvp = null;
+			html5VideoPlayer.CallBack(
+				{
+					//回调方法的this是一个回调返回对象
+					play:function()
+					{
+						//回调获取信息demo:播放视频时获取音量
+						console.log(this.GetVolume());
+						//联动demo:播放视频时静音
+						hvp.SetMuted();
+					},
+				});
+			hvp = html5VideoPlayer.Create('.videoClass');
+			hvp.SetCurrentTime(10);
+			hvp.SetVolume(0.5);
+			//hvp.SetMuted();
+		};
+	</script>
+	<body>
+		<div class="videoClass">
+		</div>
+	</body>
+</html>
