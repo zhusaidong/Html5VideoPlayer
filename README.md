@@ -111,6 +111,8 @@
 	//hvp.SetMuted();
 ```
 
+[点击查看demo](http://zhusaidong.github.io/Html5VideoPlayer_demo)
+
 * 截图
 
 ![screenshot](screenshot.png)
