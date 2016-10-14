@@ -8,6 +8,7 @@ var Html5VideoPlayer = function(config)
 	this.vHeight = config.vHeight || 100;
 	this.vSrc = config.vSrc || '';
 	this.vZIndex = config.vZIndex || 100;
+	this.vPoster = config.vPoster || "";
 	this.vShowLightSwitch = config.vShowLightSwitch != undefined ? config.vShowLightSwitch : true;
 	this.vHaveLight =
 	{
@@ -144,6 +145,10 @@ Html5VideoPlayer.prototype.Create = function(querySelector)
 	video.controls = 1;
 	video.style.position = "absolute";
 	video.style['z-index'] = this.vZIndex + 2;
+	if(this.vPoster != '')
+	{
+		video.poster = this.vPoster;
+	}
 	video.width = this.vWidth;
 	video.height = this.vHeight;
 	video.src = this.vSrc;
@@ -153,22 +158,35 @@ Html5VideoPlayer.prototype.Create = function(querySelector)
 	FullScreen(video);
 	//开/关灯
 	this.vShowLightSwitch && LightSwitch(this,videoDiv);
-	//键盘左右控制
+	//键盘控制
 	document.addEventListener("keydown",function()
 		{
 			var currentTime = CallbackReturnObj.GetCurrentTime();
-			//右键
-			if(event.keyCode == 39)
+			var currentVolume = CallbackReturnObj.GetVolume();
+			switch(event.keyCode)
 			{
-				returnObj.SetCurrentTime(currentTime + 5);
-			}
-			//左键
-			else if(event.keyCode == 37)
-			{
-				returnObj.SetCurrentTime(currentTime - 5);
+				//左键
+				case 37:
+					returnObj.SetCurrentTime(currentTime - 5);
+					break;
+				//右键
+				case 39:
+					returnObj.SetCurrentTime(currentTime + 5);
+					break;
+				//上键
+				case 38:
+					returnObj.SetVolume(currentVolume + 0.1);
+					break;
+				//下键
+				case 40:
+					returnObj.SetVolume(currentVolume - 0.1);
+					break;
+				//空格键
+				case 32:
+					CallbackReturnObj.GetInfo("paused") ? returnObj.SetPlay() : returnObj.SetPause();
+					break;
 			}
 		},false);
-	
 	if(video.error != null)
 	{
 		var errorMsg =

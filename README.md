@@ -2,12 +2,21 @@
 
 ---
 
+###logo
+
+![logo](logo.png)
+
+---
+
 <strong>支持</strong> 双击全屏
 
 <strong>支持</strong> 左右键控制播放进度
 
 <strong>支持</strong> 开关灯控制
 
+<strong>支持</strong> 上下键控制音量
+
+<strong>支持</strong> 空格键控制视频播放
 
 ###说明
 
@@ -24,6 +33,8 @@
 >> `vZIndex` z-index,默认100
 
 >> `vShowLightSwitch` 是否显示开关灯按钮
+
+>> `vPoster` 视频封面
 
 > 回调
 
@@ -116,6 +127,18 @@
 * 截图
 
 ![screenshot](screenshot.png)
+
+### 更新
+
+---
+
+2016-10-14 <strong>添加</strong> 项目logo
+
+2016-10-14 <strong>添加</strong> 上下键控制音量
+
+2016-10-14 <strong>添加</strong> 视频封面
+
+2016-10-14 <strong>添加</strong> 空格键控制视频播放
 
 ### 其它
 
