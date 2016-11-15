@@ -17,23 +17,99 @@
 					vZIndex:100,
 					vWidth:600,
 					vHeight:300,
-					vSrc:"http://k.youku.com/player/getFlvPath/sid/547606700693221539fcf_00/st/mp4/fileid/030020010057CE338B6D7D2BEEFCF99CB80F94-CBA5-EEBD-6F6E-D9EA83AC123B?k=755ad521af2ed8fc261f4829&hd=1&myp=0&ts=3167&ymovie=1&r=s0KfeG/MpJGxT8zBRdWN/IHAQeg1csU4bRevfhnqJ68fs6Vmrvvxbp05mfybIb1vHq59DQUHJIg6DJ3Q2ZmMEmXEkJ3oEyXka2HhlrfXHKXWuqHBIbXuGOKkBWIL2ZwM&type=&sid=547606700693221539fcf&token=3708&oip=1863149221&did=ba0414d9036662555bbea1f695a68300&ctype=21&ev=1&ep=i%2BAQz%2FTr17kbcKjVnGtXcXZXXalQE5U0sLrr3lBwZEZ0%2FBEeZzL60na8BI5bEUWZLRLe8kcKsD3VcLOGRjVR9%2FzJpOzEKWzuxesVGzHmb%2B%2Fg6dJOvPuNVVz%2Bop33lHzY",
+					vSrc:"http://zhusaidong.github.io/Html5VideoPlayer_demo/test.mp4",
 				});
-			console.log(html5VideoPlayer);
 			var hvp = null;
-			html5VideoPlayer.CallBack(
+			var callback = 
+			{
+				loadstart:function()
 				{
-					//回调方法的this是一个回调返回对象
-					play:function()
+					console.log("客户端开始请求数据时 触发事件 loadstart");
+				},
+				suspend:function()
+				{
+					console.log("延迟下载时 触发事件 suspend");
+				},
+				abort:function()
+				{
+					console.log("客户端主动终止下载时 触发事件 abort");
+				},
+				progress:function()
+				{
+					console.log("客户端正在请求数据时 触发事件 progress");
+				},
+				error:function()
+				{
+					console.log("请求数据时遇到错误时 触发事件 error");
+				},
+				stalled:function()
+				{
+					console.log("网速失速时 触发事件 stalled");
+				},
+				play:function()
+				{
+					console.log("播放时触发时 触发事件 play");
+				},
+				playing:function()
+				{
+					console.log("开始回放时 触发事件 playing");
+				},
+				pause:function()
+				{
+					console.log("暂停触发时 触发事件 pause");
+				},
+				ended:function()
+				{
+					console.log("播放结束时 触发事件 ended");
+				},
+				loadedmetadata:function()
+				{
+					console.log("成功获取资源长度时 触发事件 loadedmetadata");
+				},
+				waiting:function()
+				{
+					console.log("等待数据,并非错误时 触发事件 waiting");
+				},
+				canplay:function()
+				{
+					console.log("可以播放,但中途可能因为加载而暂停时 触发事件 canplay");
+				},
+				canplaythrough:function()
+				{
+					console.log("可以播放,全部加载完毕时 触发事件 canplaythrough");
+				},
+				seeking:function()
+				{
+					console.log("寻找中时 触发事件 seeking");
+				},
+				seeked:function()
+				{
+					console.log("寻找完毕时 触发事件 seeked");
+				},
+				timeupdate:function()
+				{
+					console.log("播放时间改变时 触发事件 timeupdate");
+				},
+				ratechange:function()
+				{
+					console.log("播放速率改变时 触发事件 ratechange");
+				},
+				durationchange:function()
+				{
+					console.log("资源长度改变时 触发事件 durationchange");
+				},
+				volumechange:function()
+				{
+					if(this.GetVolume() == 0)
 					{
-						//回调获取信息demo:播放视频时获取音量
-						console.log(this.GetVolume());
-						//联动demo:播放视频时静音
-						hvp.SetMuted();
-					},
-				});
+						console.log('你静音了');
+					}
+					console.log("音量或静音被改变时 触发事件 volumechange");
+				},
+			};
+			html5VideoPlayer.CallBack(callback);
 			hvp = html5VideoPlayer.Create('.videoClass');
-			hvp.SetCurrentTime(10);
+			hvp.SetCurrentTime(20);
 			hvp.SetVolume(0.5);
 			//hvp.SetMuted();
 		};

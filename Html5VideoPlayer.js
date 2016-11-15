@@ -211,9 +211,12 @@ Html5VideoPlayer.prototype.Create = function(querySelector)
 			key = key || null
 			var info = 
 			{
-				paused:video.paused,
-				ended:video.ended,
-				duration:video.duration,
+				paused		:video.paused,
+				ended		:video.ended,
+				duration	:video.duration,
+				muted		:video.muted,
+				currentTime	:video.currentTime,
+				volume		:video.volume,
 			};
 			if(key != null && info[key] != undefined)
 			{
@@ -224,7 +227,7 @@ Html5VideoPlayer.prototype.Create = function(querySelector)
 		//获取音量
 		GetVolume : function()
 		{
-			return video.volume;
+			return video.muted ? 0 : video.volume;
 		},
 		//获取当前播放的时间
 		GetCurrentTime : function()
@@ -238,7 +241,6 @@ Html5VideoPlayer.prototype.Create = function(querySelector)
 		{
 			if(that.vCallBack != undefined && that.vCallBack[e] != undefined)
 			{
-				//console.log((new Date()).getTime(),e)
 				that.vCallBack[e].call(CallbackReturnObj);
 			}
 		},false);
@@ -271,26 +273,17 @@ Html5VideoPlayer.prototype.Create = function(querySelector)
 		//设置当前播放的时间
 		SetCurrentTime : function(time)
 		{
-			var time = time != undefined ? time : -1;
-			if(time != -1)
-			{
-				video.currentTime = time;
-			}
+			video.currentTime = time || 0;
 		},
 		//设置音量
 		SetVolume : function(volume)
 		{
-			var volume = volume || 0;
-			if(volume != 0)
-			{
-				video.volume = volume;
-			}
+			video.volume = volume || 0;
 		},
 		//设置静音
 		SetMuted : function(muted)
 		{
-			var muted = muted || true;
-			video.muted = muted;
+			video.muted = muted || true;
 		},
 		//设置暂停
 		SetPause : function()
