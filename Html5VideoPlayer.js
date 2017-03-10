@@ -142,7 +142,11 @@ Html5VideoPlayer.prototype.Create = function(querySelector)
 	video.innerHTML = "您的浏览器不支持html5 video!";
 	//video.autoplay = 1;
 	video.loop = 1;
-	video.controls = 1;
+	
+	//用js创建播放控制器
+	video.controls = 0;
+	this.control(videoDiv);
+	
 	video.style.position = "absolute";
 	video.style['z-index'] = this.vZIndex + 2;
 	if(this.vPoster != '')
@@ -152,6 +156,7 @@ Html5VideoPlayer.prototype.Create = function(querySelector)
 	video.width = this.vWidth;
 	video.height = this.vHeight;
 	video.src = this.vSrc;
+	video.style['object-fit'] = 'fill';
 	videoDiv.appendChild(video);
 	
 	//双击全屏
@@ -297,4 +302,45 @@ Html5VideoPlayer.prototype.Create = function(querySelector)
 		},
 	};
 	return returnObj;
+};
+//用js创建播放控制器
+Html5VideoPlayer.prototype.control = function(videoDiv)
+{
+	var controlHeight = 40;
+	
+	var control = document.createElement('div');
+	control.id = "video_control_" + new Date().getTime();
+	control.style['position'] = "absolute";
+	control.style['z-index'] = this.vZIndex + 3;
+	control.style['width'] = this.vWidth;
+	control.style['height'] = controlHeight;
+	videoDiv.appendChild(control);
+	
+	control.style['background-color'] = '#dadada';
+	control.style['margin-top'] = this.vHeight - controlHeight;
+	
+	//控制器组件
+	var controlAssembly = document.createElement('li');
+	controlAssembly.style['width'] = 40;
+	controlAssembly.style['height'] = 40;
+	controlAssembly.style['list-style-type'] = 'none';
+	controlAssembly.style['background-image'] = 'url("./css/timg.jpg")';
+	controlAssembly.style['background-position'] = '-20 -20';
+	
+	control.appendChild(controlAssembly);
+	
+	/*
+	*/
+	//控制器 显示/延时隐藏
+	videoDiv.addEventListener("mouseover",function()
+		{
+			control.style.display = 'block';
+		});
+	videoDiv.addEventListener("mouseout",function()
+		{
+			setTimeout(function()
+				{
+					control.style.display = 'none';
+				},3000);
+		});
 };
