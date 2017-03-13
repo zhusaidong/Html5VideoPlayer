@@ -145,7 +145,7 @@ Html5VideoPlayer.prototype.Create = function(querySelector)
 	
 	//用js创建播放控制器
 	video.controls = 0;
-	this.control(videoDiv);
+	this.control(videoDiv,video);
 	
 	video.style.position = "absolute";
 	video.style['z-index'] = this.vZIndex + 2;
@@ -304,7 +304,7 @@ Html5VideoPlayer.prototype.Create = function(querySelector)
 	return returnObj;
 };
 //用js创建播放控制器
-Html5VideoPlayer.prototype.control = function(videoDiv)
+Html5VideoPlayer.prototype.control = function(videoDiv,video)
 {
 	var controlHeight = 40;
 	
@@ -329,8 +329,11 @@ Html5VideoPlayer.prototype.control = function(videoDiv)
 	
 	control.appendChild(controlAssembly);
 	
-	/*
-	*/
+	controlAssembly.addEventListener("click",function()
+		{
+			!video.paused?video.pause():video.play();
+		});
+	
 	//控制器 显示/延时隐藏
 	videoDiv.addEventListener("mouseover",function()
 		{
