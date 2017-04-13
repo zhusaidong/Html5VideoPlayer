@@ -144,8 +144,8 @@ Html5VideoPlayer.prototype.Create = function(querySelector)
 	video.loop = 1;
 	
 	//用js创建播放控制器
-	video.controls = 0;
-	this.control(videoDiv,video);
+	video.controls = 1;
+	//this.control(videoDiv,video);
 	
 	video.style.position = "absolute";
 	video.style['z-index'] = this.vZIndex + 2;
@@ -156,7 +156,7 @@ Html5VideoPlayer.prototype.Create = function(querySelector)
 	video.width = this.vWidth;
 	video.height = this.vHeight;
 	video.src = this.vSrc;
-	video.style['object-fit'] = 'fill';
+	//video.style['object-fit'] = 'fill';
 	videoDiv.appendChild(video);
 	
 	//双击全屏
