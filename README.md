@@ -24,6 +24,8 @@
 
 > 配置
 
+>> `isUseBlob` 是否使用blob
+
 >> `vWidth` 控件宽
 
 >> `vHeight` 控件高
@@ -99,6 +101,7 @@
 ```javascript
 	var html5VideoPlayer = new Html5VideoPlayer(
 		{
+			isUseBlob:true,
 			vZIndex:100,
 			vWidth:600,
 			vHeight:300,
@@ -139,6 +142,8 @@
 2016-10-14 <strong>添加</strong> 视频封面
 
 2016-10-14 <strong>添加</strong> 空格键控制视频播放
+
+2017-04-24 <strong>添加</strong> 使用blob功能
 
 ### TODO
 
