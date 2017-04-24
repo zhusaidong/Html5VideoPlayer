@@ -4,6 +4,7 @@ html5版的视频播放器
 */
 var Html5VideoPlayer = function(config)
 {
+	this.isUseBlob = !(config.isUseBlob !== undefined && config.isUseBlob === false);
 	this.vWidth = config.vWidth || 200;
 	this.vHeight = config.vHeight || 100;
 	this.vSrc = config.vSrc || '';
@@ -128,6 +129,22 @@ var LightSwitch = function(that,videoDiv)
 			});
 		videoDiv.appendChild(light);
 };
+//使用blob
+Html5VideoPlayer.prototype.blob = function(video,src)
+{
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', src, true);
+	xhr.responseType = 'blob';
+	xhr.onload = function(e)
+	{
+		if (this.status == 200)
+		{
+			var blob = this.response;
+			video.src = URL.createObjectURL(blob);
+		}
+	};
+	xhr.send(null);
+};
 Html5VideoPlayer.prototype.Create = function(querySelector)
 {
 	this.videoPlayerQuerySelector = document.querySelector(querySelector);
@@ -155,7 +172,15 @@ Html5VideoPlayer.prototype.Create = function(querySelector)
 	}
 	video.width = this.vWidth;
 	video.height = this.vHeight;
-	video.src = this.vSrc;
+	
+	if(this.isUseBlob)
+	{
+		this.blob(video,this.vSrc);
+	}
+	else
+	{
+		video.src = this.vSrc;
+	}
 	//video.style['object-fit'] = 'fill';
 	videoDiv.appendChild(video);
 	
