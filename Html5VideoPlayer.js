@@ -184,6 +184,11 @@ Html5VideoPlayer.prototype.Create = function(querySelector)
 	//video.style['object-fit'] = 'fill';
 	videoDiv.appendChild(video);
 	
+	//TODO videoShadowRoot
+	//var videoShadowRoot = document.querySelector('div::-webkit-media-controls');
+	//video.shadowRoot;
+	//console.log("videoShadowRoot",videoShadowRoot);
+	
 	//双击全屏
 	FullScreen(video);
 	//开/关灯
