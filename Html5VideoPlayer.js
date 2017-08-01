@@ -76,58 +76,43 @@ var FullScreen = function(video)
 //开关灯
 var LightSwitch = function(that,videoDiv)
 {
-	//关灯效果样式
-		var shadowId = "shadow_" + new Date().getTime();
-		var shadowCss = ""
-			+ "#" + shadowId + "{"
-			+ "		position:absolute;"
-			+ "		background-color:gray;"
-			+ "		left:0;"
-			+ "		top:0;"
-			+ "		width:100%;"
-			+ "		height:100%;"
-			+ "		z-index:" + that.vZIndex + ";"
-			+ "}";
-		var style = document.createElement('style');
-		style.innerHTML = shadowCss;
-		document.head.appendChild(style);
-		
-		//关灯效果
-		var shadow = document.createElement('div');
-		shadow.id = shadowId;
-		shadow.style.display = "none";
-		videoDiv.appendChild(shadow);
-		
-		//开/关灯按钮
-		var closeLight = '<img src="' + that.vHaveLight.offIcon + '"/>' + that.vHaveLight.offText;
-		var openLight = '<img src="' + that.vHaveLight.onIcon + '"/>' + that.vHaveLight.onText;
-		var light = document.createElement('span');
-		light.id = "light_" + new Date().getTime();
-		light.className = "close-light";
-		light.style.top = 20;
-		light.style.position = "absolute";
-		light.style['z-index'] = that.vZIndex + 2;
-		light.style.left = that.vWidth;
-		light.innerHTML = closeLight;
-		//开/关灯按钮点击事件
-		light.addEventListener('click',function()
+	//关灯效果
+	var shadow = document.createElement('div');
+	shadow.className = 'shadow';
+	shadow.style.display = "none";
+	shadow.style['z-index'] = that.vZIndex;
+	videoDiv.appendChild(shadow);
+	
+	//开/关灯按钮
+	var closeLight = '<img src="' + that.vHaveLight.offIcon + '"/>' + that.vHaveLight.offText;
+	var openLight = '<img src="' + that.vHaveLight.onIcon + '"/>' + that.vHaveLight.onText;
+	var light = document.createElement('span');
+	light.id = "light_" + new Date().getTime();
+	light.className = "close-light";
+	light.style.top = 20;
+	light.style.position = "absolute";
+	light.style['z-index'] = that.vZIndex + 2;
+	light.style.left = that.vWidth;
+	light.innerHTML = closeLight;
+	//开/关灯按钮点击事件
+	light.addEventListener('click',function()
+		{
+			if(this.className == "close-light")
 			{
-				if(this.className == "close-light")
-				{
-					//关灯
-					this.innerHTML = openLight;
-					this.className = "open-light";
-					shadow.style.display = "block";
-				}
-				else
-				{
-					//开灯
-					this.innerHTML = closeLight;
-					this.className = "close-light";
-					shadow.style.display = "none";
-				}
-			});
-		videoDiv.appendChild(light);
+				//关灯
+				this.innerHTML = openLight;
+				this.className = "open-light";
+				shadow.style.display = "block";
+			}
+			else
+			{
+				//开灯
+				this.innerHTML = closeLight;
+				this.className = "close-light";
+				shadow.style.display = "none";
+			}
+		});
+	videoDiv.appendChild(light);
 };
 //使用blob
 Html5VideoPlayer.prototype.blob = function(video,src)
@@ -163,6 +148,7 @@ Html5VideoPlayer.prototype.Create = function(querySelector)
 	//用js创建播放控制器
 	video.controls = 1;
 	//this.control(videoDiv,video);
+	//this.contextmenu(videoDiv,video);
 	
 	video.style.position = "absolute";
 	video.style['z-index'] = this.vZIndex + 2;
@@ -181,7 +167,7 @@ Html5VideoPlayer.prototype.Create = function(querySelector)
 	{
 		video.src = this.vSrc;
 	}
-	//video.style['object-fit'] = 'fill';
+	video.style['object-fit'] = 'fill';
 	videoDiv.appendChild(video);
 	
 	//TODO videoShadowRoot
@@ -194,7 +180,7 @@ Html5VideoPlayer.prototype.Create = function(querySelector)
 	//开/关灯
 	this.vShowLightSwitch && LightSwitch(this,videoDiv);
 	//键盘控制
-	document.addEventListener("keydown",function()
+	document.addEventListener("keydown",function(event)
 		{
 			var currentTime = CallbackReturnObj.GetCurrentTime();
 			var currentVolume = CallbackReturnObj.GetVolume();
@@ -376,4 +362,72 @@ Html5VideoPlayer.prototype.control = function(videoDiv,video)
 					control.style.display = 'none';
 				},3000);
 		});
+};
+
+var bindEvent = function(elem,eventType,callback)
+{
+	callback = callback || function(){};
+	var ieType = ["on" + eventType];
+	if(ieType in elem)
+	{
+		elem[ieType] = callback;
+	}
+	else if("attachEvent" in elem)
+	{
+		elem.attachEvent(ieType,callback);
+	}
+	else
+	{
+		elem.addEventListener(eventType,callback,false);
+	}
+}
+var menu_i = 0;
+var addMenu = function(contextmenu,html,callback)
+{
+	var menu = document.createElement("div");
+	menu.className = 'menu';
+	menu.dataset['menu_id'] = menu_i++;
+	menu.innerHTML = html;
+	contextmenu.appendChild(menu);
+	bindEvent(menu,"click",callback);
+	return menu;
+};
+//右键菜单
+Html5VideoPlayer.prototype.contextmenu = function(videoDiv,video)
+{
+	//自定义菜单
+	var contextmenu = document.createElement("div");
+	contextmenu.className = "contextmenu";
+	contextmenu.style.display = "none";
+	contextmenu.style['z-index'] = this.vZIndex + 3;
+	videoDiv.appendChild(contextmenu);
+	
+	//打开右键菜单
+	bindEvent(video,"contextmenu",function(ev)
+		{
+			ev = ev || window.event;
+			if(ev.button == 2)
+			{
+				contextmenu.style.left = ev.clientX +"px";
+				contextmenu.style.top = ev.clientY +"px";
+				contextmenu.style.display = "block";
+			}
+			//阻止原生右键
+			return false;
+		});
+	//关闭右键菜单
+	bindEvent(document,"mouseup",function()
+		{
+			contextmenu.style.display = "none";
+		});
+    
+	addMenu(contextmenu,'about',function()
+		{
+			alert('developed by zsdroid');
+		});
+	addMenu(contextmenu,'github',function()
+		{
+			window.open('https://github.com/zhusaidong/Html5VideoPlayer');
+		});
+	
 };
