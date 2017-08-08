@@ -10,11 +10,17 @@
 }
 .contextmenu > div
 {
+	cursor: default;
 	color: #e9e8ea;
 	font-size: 12px;
 	padding-top: 5px;
 	padding-bottom: 5px;
     border-bottom:1px solid #8f9394;
+}
+.contextmenu > div:hover
+{
+	background-color: #bab7bd;
+	color: #4f4b52;
 }
 .shadow
 {

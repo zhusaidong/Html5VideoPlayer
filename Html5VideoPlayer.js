@@ -148,7 +148,7 @@ Html5VideoPlayer.prototype.Create = function(querySelector)
 	//用js创建播放控制器
 	video.controls = 1;
 	//this.control(videoDiv,video);
-	//this.contextmenu(videoDiv,video);
+	this.contextmenu(videoDiv,video);
 	
 	video.style.position = "absolute";
 	video.style['z-index'] = this.vZIndex + 2;
@@ -169,11 +169,6 @@ Html5VideoPlayer.prototype.Create = function(querySelector)
 	}
 	video.style['object-fit'] = 'fill';
 	videoDiv.appendChild(video);
-	
-	//TODO videoShadowRoot
-	//var videoShadowRoot = document.querySelector('div::-webkit-media-controls');
-	//video.shadowRoot;
-	//console.log("videoShadowRoot",videoShadowRoot);
 	
 	//双击全屏
 	FullScreen(video);
@@ -382,14 +377,15 @@ var bindEvent = function(elem,eventType,callback)
 	}
 }
 var menu_i = 0;
-var addMenu = function(contextmenu,html,callback)
+var addMenu = function(contextmenu,html,callback,event)
 {
+	event = event || 'click';
 	var menu = document.createElement("div");
 	menu.className = 'menu';
 	menu.dataset['menu_id'] = menu_i++;
 	menu.innerHTML = html;
 	contextmenu.appendChild(menu);
-	bindEvent(menu,"click",callback);
+	bindEvent(menu,event,callback);
 	return menu;
 };
 //右键菜单
@@ -423,11 +419,22 @@ Html5VideoPlayer.prototype.contextmenu = function(videoDiv,video)
     
 	addMenu(contextmenu,'about',function()
 		{
-			alert('developed by zsdroid');
-		});
+			addMenu(contextmenu,'github',function()
+			{
+				window.open('https://github.com/zhusaidong/Html5VideoPlayer');
+			});
+		},'mouseover');
 	addMenu(contextmenu,'github',function()
 		{
 			window.open('https://github.com/zhusaidong/Html5VideoPlayer');
 		});
 	
+	//test
+	for(var i = 0; i < 10; i++)
+	{
+		addMenu(contextmenu,'contextmenu' + (i + 1),function()
+			{
+				alert('developed by zsdroid');
+			});
+	}
 };
