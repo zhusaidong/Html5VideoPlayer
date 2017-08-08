@@ -146,6 +146,9 @@ Html5VideoPlayer.prototype.Create = function(querySelector)
 	video.loop = 1;
 	video.controls = 1;
 	
+	//自定义右键
+	this.contextmenu(videoDiv,video);
+	
 	video.style.position = "absolute";
 	video.style['z-index'] = this.vZIndex + 2;
 	if(this.vPoster != '')
@@ -309,4 +312,84 @@ Html5VideoPlayer.prototype.Create = function(querySelector)
 		},
 	};
 	return returnObj;
+};
+
+var bindEvent = function(elem,eventType,callback)
+{
+	callback = callback || function(){};
+	var ieType = ["on" + eventType];
+	if(ieType in elem)
+	{
+		elem[ieType] = callback;
+	}
+	else if("attachEvent" in elem)
+	{
+		elem.attachEvent(ieType,callback);
+	}
+	else
+	{
+		elem.addEventListener(eventType,callback,false);
+	}
+}
+var menu_i = 0;
+var addMenu = function(contextmenu,html,callback,event)
+{
+	event = event || 'click';
+	var menu = document.createElement("div");
+	menu.className = 'menu';
+	menu.dataset['menu_id'] = menu_i++;
+	menu.innerHTML = html;
+	contextmenu.appendChild(menu);
+	bindEvent(menu,event,callback);
+	return menu;
+};
+//右键菜单
+Html5VideoPlayer.prototype.contextmenu = function(videoDiv,video)
+{
+	//自定义菜单
+	var contextmenu = document.createElement("div");
+	contextmenu.className = "contextmenu";
+	contextmenu.style.display = "none";
+	contextmenu.style['z-index'] = this.vZIndex + 3;
+	videoDiv.appendChild(contextmenu);
+	
+	//打开右键菜单
+	bindEvent(video,"contextmenu",function(ev)
+		{
+			ev = ev || window.event;
+			if(ev.button == 2)
+			{
+				contextmenu.style.left = ev.clientX +"px";
+				contextmenu.style.top = ev.clientY +"px";
+				contextmenu.style.display = "block";
+			}
+			//阻止原生右键
+			return false;
+		});
+	//关闭右键菜单
+	bindEvent(document,"mouseup",function()
+		{
+			contextmenu.style.display = "none";
+		});
+    
+	addMenu(contextmenu,'about',function()
+		{
+			addMenu(contextmenu,'github',function()
+			{
+				window.open('https://github.com/zhusaidong/Html5VideoPlayer');
+			});
+		},'mouseover');
+	addMenu(contextmenu,'github',function()
+		{
+			window.open('https://github.com/zhusaidong/Html5VideoPlayer');
+		});
+	
+	//test
+	for(var i = 0; i < 10; i++)
+	{
+		addMenu(contextmenu,'contextmenu' + (i + 1),function()
+			{
+				alert('developed by zsdroid');
+			});
+	}
 };
