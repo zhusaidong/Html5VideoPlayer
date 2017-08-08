@@ -142,13 +142,9 @@ Html5VideoPlayer.prototype.Create = function(querySelector)
 	var video = document.createElement('video');
 	video.id = "video_" + new Date().getTime();
 	video.innerHTML = "您的浏览器不支持html5 video!";
-	//video.autoplay = 1;
+	video.autoplay = 1;
 	video.loop = 1;
-	
-	//用js创建播放控制器
 	video.controls = 1;
-	//this.control(videoDiv,video);
-	this.contextmenu(videoDiv,video);
 	
 	video.style.position = "absolute";
 	video.style['z-index'] = this.vZIndex + 2;
@@ -313,128 +309,4 @@ Html5VideoPlayer.prototype.Create = function(querySelector)
 		},
 	};
 	return returnObj;
-};
-//用js创建播放控制器
-Html5VideoPlayer.prototype.control = function(videoDiv,video)
-{
-	var controlHeight = 40;
-	
-	var control = document.createElement('div');
-	control.id = "video_control_" + new Date().getTime();
-	control.style['position'] = "absolute";
-	control.style['z-index'] = this.vZIndex + 3;
-	control.style['width'] = this.vWidth;
-	control.style['height'] = controlHeight;
-	videoDiv.appendChild(control);
-	
-	control.style['background-color'] = '#dadada';
-	control.style['margin-top'] = this.vHeight - controlHeight;
-	
-	//控制器组件
-	var controlAssembly = document.createElement('li');
-	controlAssembly.style['width'] = 40;
-	controlAssembly.style['height'] = 40;
-	controlAssembly.style['list-style-type'] = 'none';
-	controlAssembly.style['background-image'] = 'url("./css/timg.jpg")';
-	controlAssembly.style['background-position'] = '-20 -20';
-	
-	control.appendChild(controlAssembly);
-	
-	controlAssembly.addEventListener("click",function()
-		{
-			!video.paused?video.pause():video.play();
-		});
-	
-	//控制器 显示/延时隐藏
-	videoDiv.addEventListener("mouseover",function()
-		{
-			control.style.display = 'block';
-		});
-	videoDiv.addEventListener("mouseout",function()
-		{
-			setTimeout(function()
-				{
-					control.style.display = 'none';
-				},3000);
-		});
-};
-
-var bindEvent = function(elem,eventType,callback)
-{
-	callback = callback || function(){};
-	var ieType = ["on" + eventType];
-	if(ieType in elem)
-	{
-		elem[ieType] = callback;
-	}
-	else if("attachEvent" in elem)
-	{
-		elem.attachEvent(ieType,callback);
-	}
-	else
-	{
-		elem.addEventListener(eventType,callback,false);
-	}
-}
-var menu_i = 0;
-var addMenu = function(contextmenu,html,callback,event)
-{
-	event = event || 'click';
-	var menu = document.createElement("div");
-	menu.className = 'menu';
-	menu.dataset['menu_id'] = menu_i++;
-	menu.innerHTML = html;
-	contextmenu.appendChild(menu);
-	bindEvent(menu,event,callback);
-	return menu;
-};
-//右键菜单
-Html5VideoPlayer.prototype.contextmenu = function(videoDiv,video)
-{
-	//自定义菜单
-	var contextmenu = document.createElement("div");
-	contextmenu.className = "contextmenu";
-	contextmenu.style.display = "none";
-	contextmenu.style['z-index'] = this.vZIndex + 3;
-	videoDiv.appendChild(contextmenu);
-	
-	//打开右键菜单
-	bindEvent(video,"contextmenu",function(ev)
-		{
-			ev = ev || window.event;
-			if(ev.button == 2)
-			{
-				contextmenu.style.left = ev.clientX +"px";
-				contextmenu.style.top = ev.clientY +"px";
-				contextmenu.style.display = "block";
-			}
-			//阻止原生右键
-			return false;
-		});
-	//关闭右键菜单
-	bindEvent(document,"mouseup",function()
-		{
-			contextmenu.style.display = "none";
-		});
-    
-	addMenu(contextmenu,'about',function()
-		{
-			addMenu(contextmenu,'github',function()
-			{
-				window.open('https://github.com/zhusaidong/Html5VideoPlayer');
-			});
-		},'mouseover');
-	addMenu(contextmenu,'github',function()
-		{
-			window.open('https://github.com/zhusaidong/Html5VideoPlayer');
-		});
-	
-	//test
-	for(var i = 0; i < 10; i++)
-	{
-		addMenu(contextmenu,'contextmenu' + (i + 1),function()
-			{
-				alert('developed by zsdroid');
-			});
-	}
 };
