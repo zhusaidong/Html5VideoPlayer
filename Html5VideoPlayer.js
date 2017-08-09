@@ -4,6 +4,7 @@ html5版的视频播放器
 */
 var Html5VideoPlayer = function(config)
 {
+	this.version = '1.2.0';
 	this.isUseBlob = !(config.isUseBlob !== undefined && config.isUseBlob === false);
 	this.vWidth = config.vWidth || 200;
 	this.vHeight = config.vHeight || 100;
@@ -142,7 +143,7 @@ Html5VideoPlayer.prototype.Create = function(querySelector)
 	var video = document.createElement('video');
 	video.id = "video_" + new Date().getTime();
 	video.innerHTML = "您的浏览器不支持html5 video!";
-	video.autoplay = 1;
+	//video.autoplay = 1;
 	video.loop = 1;
 	video.controls = 1;
 	
@@ -374,22 +375,15 @@ Html5VideoPlayer.prototype.contextmenu = function(videoDiv,video)
     
 	addMenu(contextmenu,'about',function()
 		{
-			addMenu(contextmenu,'github',function()
-			{
-				window.open('https://github.com/zhusaidong/Html5VideoPlayer');
-			});
-		},'mouseover');
+			alert('developed by zsdroid');
+		});
 	addMenu(contextmenu,'github',function()
 		{
 			window.open('https://github.com/zhusaidong/Html5VideoPlayer');
 		});
-	
-	//test
-	for(var i = 0; i < 10; i++)
-	{
-		addMenu(contextmenu,'contextmenu' + (i + 1),function()
-			{
-				alert('developed by zsdroid');
-			});
-	}
+	var that = this;
+	addMenu(contextmenu,'vr. ' + that.version,function()
+		{
+			alert('vr. ' + that.version);
+		});
 };
